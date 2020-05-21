@@ -117,12 +117,12 @@ output$parm_dimreduce_dl_plot <- downloadHandler(
   },
   content  = function(file) {
     pdf(file,width = input$parm_dimreduce_figw/75, height=input$parm_dimreduce_figh/75)
-#    pdf(file,width=input$parm_dimreduce_figw/75, height=input$parm_dimreduce_figw/75)
-#    if(input$parm_dimreduce_bycolor %in% colnames(SeuratData()@meta.data) ){
-#      DimPlot(object = SeuratData(), reduction = input$parm_dimreduce_md, group.by = input$parm_dimreduce_bycolor)
-#    }else{
-      DimPlot(object = SeuratData(), reduction = input$parm_dimreduce_md, group.by = input$parm_dimreduce_bycolor,pt.size = input$parm_dimreduce_ptsize)
-#    }
+    if(input$parm_dimreduce_bycolor %in% colnames(SeuratData()@meta.data) ){
+      p <- DimPlot(object = SeuratData(), reduction = input$parm_dimreduce_md, group.by = input$parm_dimreduce_bycolor,pt.size = input$parm_dimreduce_ptsize)
+    }else{
+      p <- DimPlot(object = SeuratData(), reduction = input$parm_dimreduce_md,pt.size = input$parm_dimreduce_ptsize)
+    }
+    p
     dev.off()
   },
   contentType =  NA
