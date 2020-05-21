@@ -509,7 +509,7 @@ pathway.switch <-  reactive({
                  names(pathway_sde) <- names(gene_set.new)
                  
                })
-  save(sde,gset,pathway_sde,file="tt.RData")
+  #save(sde,gset,pathway_sde,file="tt.RData")
   
   pathway_sde
 })
