@@ -12,14 +12,11 @@ Please check https://www.rstudio.com/ for the installation of RStudio.
 
 Start an R session using RStudio and run these lines:
 ```
-install.packages("shiny")
-install.packages("shinydashboard")
-install.packages("ggplot2")
-install.packages("Seurat")
-install.packages("monocle")
-install.packages("kohonen")
-install.packages("viridis")
-install.packages("switchde")
+install.packages(c("shiny","shinydashboard","ggplot2","Seurat","kohonen","viridis"))
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(c("monocle","switchde"))
 ```
 
 ### Step 3: Start the app
