@@ -301,21 +301,40 @@ PseudotimeListAllDis <- reactive({
                  
                  n  <- input$parm_GeneSets_nbin
                  ghist     <- hist(gtime, breaks=getBreaks(gtime,n), plot=F)
-                 Correlation  <- sapply(ptime,function(p){ 
+                 cor.hist  <- sapply(ptime,function(p){ 
                    phist <- hist(p, breaks=getBreaks(p,n), plot=F)
-                   cor(ghist$density, phist$density)
+                   c(cor(ghist$density, phist$density),-log10(cor.test(ghist$density, phist$density)$p.value))
                  })
-                 log10pval  <- sapply(ptime,function(p){ 
-                   phist <- hist(p, breaks=getBreaks(p,n), plot=F)
-                   -log10(cor.test(ghist$density, phist$density)$p.value)
+
+                 
+                 
+                 #### correlation by expressoin in sorted Pseudotime
+                 expr    <-  exprs(scData())
+                 geneset <- all$gene_set
+                 vp      <- all$v.Pseudotime
+                # save(expr,geneset,vp,gtime,file='tmp.RData') 
+                 
+                 gidx <- order(gtime)
+                 n <- length(geneset)
+                 
+                 cor.order <- sapply(1:n,function(i){
+                   exp.path <- colMeans(expr[geneset[[i]],])
+                   v1 <- exp.path[gidx]
+                   v2 <- exp.path[order(vp[[i]])]
+                   c(Correlation = cor(v1, v2), log10pval = -log10(cor.test(v1, v2)$p.value))
                  })
                  
+                 
+                 
+                 ####      #####################
                  corData     <- data.frame( Pathway     = all$corData$Pathway, 
                                             SetSize     = all$corData$SetSize, 
                                             Correlation = all$corData$Correlation,
                                             log10pval   = all$corData$log10pval,
-                                            Correlation.dis = Correlation,
-                                            log10pval.dis   =log10pval,
+                                            Correlation.dis   = cor.hist[1,],
+                                            log10pval.dis     =cor.hist[2,],
+                                            Correlation.order = cor.order[1,],
+                                            log10pval.order   =cor.order[2,], 
                                             stringsAsFactors = F
                  )
                  rownames(corData) <- rownames(all$corData)

@@ -276,11 +276,14 @@ output$HeatmapPlot <- renderPlot({
   }
   p1 <- ggplot(df,aes(x = Correlation, y = Pathway, size = SetSize, color = log10pval))+geom_point() 
   p2 <- ggplot(df,aes(x = Correlation.dis, y = Pathway, size = SetSize, color = log10pval.dis))+geom_point()
-  p3 <- ggplot(df,aes(x = Correlation, y = Correlation.dis)) + theme_bw() + geom_point()
+  p3 <- ggplot(df,aes(x = Correlation.order, y = Pathway, size = SetSize, color = log10pval.order))+geom_point()
   
-  p12 <- plot_grid(p1,p2,nrow = 1, ncol=2,labels = c("A", "B"))
   
-  plot_grid(p12,p3, nrow = 2, ncol=1, labels = c("", "C"))
+  p4 <- ggplot(df,aes(x = Correlation, y = Correlation.dis)) + theme_bw() + geom_point()
+  p5 <- ggplot(df,aes(x = Correlation, y = Correlation.order)) + theme_bw() + geom_point()
+  p6 <- ggplot(df,aes(x = Correlation.order, y = Correlation.dis)) + theme_bw() + geom_point()
+  
+  plot_grid(p1,p2,p3,p4,p5,p6,nrow = 2, ncol=3,labels = c("A", "B","C","D","E","F"))
   
 },height=function(){input$parm_GeneSets_figh},width = function(){input$parm_GeneSets_figw})
 
@@ -312,11 +315,17 @@ output$parm_GeneSets_dl_plot <- downloadHandler(
     }
     p1 <- ggplot(df,aes(x = Correlation, y = Pathway, size = SetSize, color = log10pval))+geom_point() 
     p2 <- ggplot(df,aes(x = Correlation.dis, y = Pathway, size = SetSize, color = log10pval.dis))+geom_point()
-    p3 <- ggplot(df,aes(x = Correlation, y = Correlation.dis)) + theme_bw() + geom_point()
+    p3 <- ggplot(df,aes(x = Correlation.order, y = Pathway, size = SetSize, color = log10pval.order))+geom_point()
     
-    p12 <- plot_grid(p1,p2,nrow = 1, ncol=2,labels = c("A", "B"))
     
-    p123<- plot_grid(p12,p3, nrow = 2, ncol=1, labels = c("", "C"))
+    p4 <- ggplot(df,aes(x = Correlation, y = Correlation.dis)) + theme_bw() + geom_point()
+    p5 <- ggplot(df,aes(x = Correlation, y = Correlation.order)) + theme_bw() + geom_point()
+    p6 <- ggplot(df,aes(x = Correlation.order, y = Correlation.dis)) + theme_bw() + geom_point()
+    
+    p123 <- plot_grid(p1,p2,p3,nrow = 1, ncol=3,labels = c("A", "B","C"))
+    p456 <- plot_grid(p4,p5,p6,nrow = 1, ncol=3,labels = c("D", "E","F"))
+    
+    p<- plot_grid(p123,p456, nrow = 2, ncol=1, labels = c("", ""))
     
     ggsave(file, device = "pdf",width= input$parm_GeneSets_figw/75, height=input$parm_GeneSets_figh/75, units="in")
   },
