@@ -25,16 +25,13 @@ install.packages("switchde")
 ### Step 3: Start the app
 
 Start an R session using RStudio and run these lines:
-
-
 ```
 shiny::runGitHub("TIPS", "qingshanni")    
 ```
-#Documentation
+# Documentation
 Detailed usage instructions can be found in the user manual 
 
-#License
-
+# License
 Copyright(c) <2020><ZH Zheng, Y Wan, QS Ni, AMU China, All Rights Reserved
 
 This program is free software and can be redistributed and/or modified under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the license, or (at your option) any later version.
