@@ -13,19 +13,22 @@ Please check https://www.rstudio.com/ for the installation of RStudio.
 ### Step 2: Install required packages
 
 Start an R session using RStudio and run these lines:
-
-- install.packages("shiny")  
-- install.packages("shinydashboard")  
-- install.packages("ggplot2") 
-- install.packages("Seurat")
-- install.packages("monocle")  
-- install.packages("kohonen")
-- install.packages("viridis")
-- install.packages("switchde")
-
+```
+install.packages("shiny")
+install.packages("shinydashboard")
+install.packages("ggplot2")
+install.packages("Seurat")
+install.packages("monocle")
+install.packages("kohonen")
+install.packages("viridis")
+install.packages("switchde")
+```
 
 ### Step 3: Start the app
 
 Start an R session using RStudio and run these lines:
 
-shiny::runGitHub("TIPS", "qingshanni")  
+
+```
+shiny::runGitHub("TIPS", "qingshanni")    
+```
