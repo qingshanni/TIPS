@@ -17,17 +17,36 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install(c("monocle","switchde"))
 ```
 
+**Notes**
+
+*TIPS was written and tested with the following specific versions of packages:*
+
+    ggplot2 3.3.0
+    kohonen 3.0.10
+    markdown 1.1
+    monocle 2.14.0
+    Seurat 2.3.4
+    shiny 1.4.0.2
+    shinydashboard 0.7.1
+    switchde 1.12.0
+    viridis 0.5.1
+
+We recommend installing these versions to ensure compatibility with TIPS.
+
+
+
 ### Step 3: Start the app
 
 Start an R session using RStudio and run these lines:
 ```
+library(shiny)
 shiny::runGitHub("TIPS", "qingshanni")    
 ```
 # Documentation
 Detailed usage instructions can be found in the user manual 
 
 # License
-Copyright(c) <2020><ZH Zheng, Y Wan, QS Ni, AMU China, All Rights Reserved
+
 
 This program is free software and can be redistributed and/or modified under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the license, or (at your option) any later version.
 
