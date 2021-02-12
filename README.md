@@ -1,5 +1,6 @@
 # TIPS
-A simplified approach for trajectory inference of pathway significance.
+Trajectory Inference of Pathway Significance through Pseudotime Comparison for Functional Assessment of
+single-cell RNAseq Data
 # Launch TIPS directly from R and GitHub
 ### Step 1: Install R and RStudio
 Before running TIPS, you will need to have R and RStudio installed
@@ -42,8 +43,6 @@ Start an R session using RStudio and run these lines:
 library(shiny)
 shiny::runGitHub("TIPS", "qingshanni")    
 ```
-# Documentation
-Detailed usage instructions can be found in the user manual 
 
 # License
 
