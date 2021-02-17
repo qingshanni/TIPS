@@ -86,6 +86,69 @@ output$ui_gdata <- renderUI({
         ) 
 })
 
+#############################################        QC          ##########################
+
+output$ui_filter <- renderUI({
+  
+  fluidRow( 
+    
+    column(width = 3, wellPanel( h4('Selection and filtration of cells based on QC metrics'),
+                                numericInput("parm_filter_mt", "Mitochondrial counts(%):", 5, min = 1,step = 1),
+                                numericInput("parm_filter_gene_max", "Maximum gene counts per cell:", 2500, min = 1,step = 1),
+                                numericInput("parm_filter_gene_min", "Minimum gene counts per cell:", 10, min = 1,step = 1),
+                                numericInput("parm_filter_cell_min", "Minimum cell counts per gene:", 3, min = 1,step = 1))
+    ),
+    column(width = 9,  box( plotOutput("QCPlotVln", height = 800, width = 1000),                
+                            width = NULL,  collapsible = F,title = "Summary of genes, UMIs and Mitochondrial genes", status = "primary", solidHeader = TRUE)) 
+  ) 
+})
+
+
+
+output$QCPlotVln <- renderPlot({
+  if(is.null(DataQC())) {
+    return(NULL)
+  } 
+  dd <- DataQC()
+  p1 <- VlnPlot(object = dd, features.plot = c("nGene", "nUMI", "percent.mito"), nCol = 3)
+  
+  df  <- data.frame(nGene = ' ',Count = dd@meta.data$nGene)
+  p1 <- ggplot(df, aes(x=nGene,y=Count)) + geom_violin() + 
+    geom_hline(yintercept = c(input$parm_filter_gene_min,input$parm_filter_gene_max),colour = "blue",size = 1) +
+    geom_jitter(shape=16, position=position_jitter(0.2))+ 
+    theme_classic() + labs(x='',y='Number of genes per cell')
+  
+  df <- data.frame(nGene = ' ',Count = dd@meta.data$nUMI)
+  p2 <- ggplot(df, aes(x=nGene,y=Count)) + geom_violin() +
+    geom_jitter(shape=16, position=position_jitter(0.2))+ 
+    theme_classic() + labs(x='',y='Number of UMIs per cell')
+  
+  df  <- data.frame(nGene = ' ',Count = dd@meta.data$percent.mito * 100)
+  p3 <- ggplot(df, aes(x=nGene,y=Count)) + geom_violin() + 
+    geom_hline(yintercept = c(input$parm_filter_mt),colour = "blue",size = 1) +
+    geom_jitter(shape=16, position=position_jitter(0.2))+ 
+    theme_classic() + ylim(0,100) + labs(x='',y='Percent of Mitochondrial genes in cell')
+  
+  
+  gene.cor <- round(x = cor(x = dd@meta.data$nUMI, y = dd@meta.data$percent.mito),digits = 2)
+  p4 <- ggplot(data=dd@meta.data, aes(x=nUMI, y=percent.mito))+geom_point() + 
+    geom_hline(yintercept = c(input$parm_filter_mt),colour = "blue",size = 1) +
+    labs(title=paste0('   R = ',gene.cor))+ ylim(0,100) +theme_classic()
+  
+  gene.cor <- round(x = cor(x = dd@meta.data$nUMI, y = dd@meta.data$nGene),digits = 2)
+  p5 <- ggplot(data=dd@meta.data, aes(x=nUMI, y=nGene))+geom_point() + 
+    geom_hline(yintercept = c(input$parm_filter_gene_min,input$parm_filter_gene_max),colour = "blue",size = 1) +
+    labs(title=paste0('   R = ',gene.cor)) + theme_classic() 
+  
+  p123 <- plot_grid(p1,p2,p3,nrow = 1, ncol=3,labels = c("A", "B","C"))
+  p45 <- plot_grid(p4,p5,nrow = 1, ncol=2,labels = c("D", "E"))
+  plot_grid(p123,p45, nrow = 2, ncol=1)
+})
+
+
+
+
+
 
 ############################################# Dimensional reduction analysis ##########################
 output$dimreducePlot <- renderPlot({

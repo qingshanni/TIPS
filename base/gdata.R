@@ -86,6 +86,22 @@ gene_set <- reactive({
 })
 
 
+############################## quanlity control #############################
+
+DataQC <- reactive({
+  
+  withProgress(message = 'Calculation in progress',
+               detail = 'This may take a while...', value = 0, 
+               expr = {
+                   dd           <- CreateSeuratObject(gdata_expr(),meta.data =gdata_phenotype())
+                   mito.genes   <- grep(pattern = "^[mM][tT]-", x = rownames(x = dd@data), value = TRUE)
+                   percent.mito <- Matrix::colSums(dd@raw.data[mito.genes, ])/Matrix::colSums(dd@raw.data)
+                   dd           <- AddMetaData(object = dd, metadata = percent.mito, col.name = "percent.mito")
+               })
+  dd
+})
+
+
 
 ##############################  dimreduce  ##################################
 ####    seurat version   2.3.4
@@ -100,7 +116,12 @@ SeuratData <- reactive({
                expr = {
                  isolate({
                  
-                 dd <- CreateSeuratObject(gdata_expr(),meta.data =gdata_phenotype() )
+                 dd <- CreateSeuratObject(DataQC()@raw.data,meta.data =DataQC()@meta.data,
+                                          min.cells = input$parm_filter_cell_min)
+                 dd <- FilterCells(object = dd, 
+                                   subset.names = c("nGene", "percent.mito"), 
+                                   low.thresholds  = c(input$parm_filter_gene_min, -Inf), 
+                                   high.thresholds = c(input$parm_filter_gene_max, input$parm_filter_mt/100))
 
                  if (getInputValue(input$parm_dimreduce_norm,TRUE)){
                    dd <- NormalizeData(object = dd)
