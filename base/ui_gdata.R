@@ -147,9 +147,6 @@ output$QCPlotVln <- renderPlot({
 
 
 
-
-
-
 ############################################# Dimensional reduction analysis ##########################
 output$dimreducePlot <- renderPlot({
   if(is.null(SeuratData())) {
@@ -299,11 +296,20 @@ output$ui_trajectory <- renderUI({
   
   fluidRow(    
     
-    column(width = 3,  wellPanel(        
-                                         checkboxInput("parm_traj_norm", "Normalize the data", TRUE),
-                                         checkboxInput("parm_traj_NegBinom", "NegBinom (recommended for droplet-based and/or very sparse data)", TRUE),
-                                         checkboxInput("parm_traj_reverse", "Reverse the beginning and end points of the learned biological process", FALSE),
-                                         actionButton("btn_trajectory", "Compute")
+    column(width = 3,  wellPanel(    radioButtons("parm_traj_filter", "Filter data by clusters:",
+                                                  c("Yes" = "Y","No" = "N"), selected = 'N',
+                                                  inline = T  ),
+                                     conditionalPanel(
+                                               condition = "input.parm_traj_filter == 'Y'",
+                                               selectInput("parm_traj_cluster", "Select clusters:", 
+                                                           choices  = levels(SeuratData()@ident),
+                                                           selected = levels(SeuratData()@ident),
+                                                           multiple = T )), 
+      
+                                     checkboxInput("parm_traj_norm", "Normalize the data", TRUE),
+                                     checkboxInput("parm_traj_NegBinom", "NegBinom (recommended for droplet-based and/or very sparse data)", TRUE),
+                                     checkboxInput("parm_traj_reverse", "Reverse the beginning and end points of the learned biological process", FALSE),
+                                     actionButton("btn_trajectory", "Compute")
     ),
                     wellPanel(       sliderInput("parm_traj_figw", "Figure width:", min = 100, max = 1500, value = 600),
                                      sliderInput("parm_traj_figh", "Figure  Hight:", min = 100, max = 1000, value = 400),

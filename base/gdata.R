@@ -166,21 +166,33 @@ scData <- reactive({
                expr = {
                  isolate({
                  
+                   if(input$parm_traj_filter == 'Y'){
+                     
+                     subSeuratDat <- SubsetData(SeuratData(),ident.use = input$parm_traj_cluster,subset.raw = T)
+                     
+                   }else{
+                     
+                     subSeuratDat <- SubsetData(SeuratData(),ident.use = levels(SeuratData()@ident),subset.raw = T)
+                   }
+                   
+                   
                  if(input$parm_traj_NegBinom){
-                   fdata           <-  data.frame( gene_short_name = rownames(gdata_expr()))
-                   rownames(fdata) <- rownames(gdata_expr())
+                   fdata           <-  data.frame( gene_short_name = rownames(subSeuratDat@raw.data))
+                   rownames(fdata) <- rownames(subSeuratDat@raw.data)
                    fd <- new('AnnotatedDataFrame', data = fdata) 
-                   pd <- new('AnnotatedDataFrame', data = SeuratData()@meta.data) 
-                   sc.data  <- newCellDataSet(gdata_expr(),phenoData = pd, featureData = fd, 
+                   pd <- new('AnnotatedDataFrame', data = subSeuratDat@meta.data) 
+                   sc.data  <- newCellDataSet(subSeuratDat@raw.data, phenoData = pd, featureData = fd, 
                                               lowerDetectionLimit = 0.1)
+                   
+                   
                    sc.data <- estimateSizeFactors(sc.data)
                    sc.data <- estimateDispersions(sc.data)
                  }else{  
-                   sc.data <- importCDS(SeuratData(), import_all = T)
+                   sc.data <- importCDS(subSeuratDat, import_all = T)
                  }  
                    
                    sc.data <- detectGenes(sc.data, min_expr = 0.1)
-                   sc.data <- setOrderingFilter(sc.data, SeuratData()@var.genes)
+                   sc.data <- setOrderingFilter(sc.data, subSeuratDat@var.genes)
                    if(input$parm_traj_norm){
                      sc.data <- reduceDimension(sc.data, reduction_method = "DDRTree")
                    }else{

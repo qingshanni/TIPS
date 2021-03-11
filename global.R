@@ -4,7 +4,7 @@ r_path <- '.'
 library('ggplot2')
 library("shiny")
 library("shinydashboard")
-library('Seurat')
+#library('Seurat')
 library('monocle')
 library('kohonen')
 library("viridis") 
