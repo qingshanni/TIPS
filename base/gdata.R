@@ -154,6 +154,19 @@ SeuratData <- reactive({
 })
 
  
+subSeuratDat <- reactive({
+  
+  if(input$parm_traj_filter == 'Y'){
+    
+    dd <- SubsetData(SeuratData(),ident.use = input$parm_traj_cluster,subset.raw = T)
+    
+  }else{
+    
+    dd <- SubsetData(SeuratData(),ident.use = levels(SeuratData()@ident),subset.raw = T)
+  }
+  dd
+})
+
 ####   monocle version 2.6.4
 
 scData <- reactive({
@@ -166,33 +179,23 @@ scData <- reactive({
                expr = {
                  isolate({
                  
-                   if(input$parm_traj_filter == 'Y'){
-                     
-                     subSeuratDat <- SubsetData(SeuratData(),ident.use = input$parm_traj_cluster,subset.raw = T)
-                     
-                   }else{
-                     
-                     subSeuratDat <- SubsetData(SeuratData(),ident.use = levels(SeuratData()@ident),subset.raw = T)
-                   }
-                   
-                   
                  if(input$parm_traj_NegBinom){
-                   fdata           <-  data.frame( gene_short_name = rownames(subSeuratDat@raw.data))
-                   rownames(fdata) <- rownames(subSeuratDat@raw.data)
+                   fdata           <-  data.frame( gene_short_name = rownames(subSeuratDat()@raw.data))
+                   rownames(fdata) <- rownames(subSeuratDat()@raw.data)
                    fd <- new('AnnotatedDataFrame', data = fdata) 
-                   pd <- new('AnnotatedDataFrame', data = subSeuratDat@meta.data) 
-                   sc.data  <- newCellDataSet(subSeuratDat@raw.data, phenoData = pd, featureData = fd, 
+                   pd <- new('AnnotatedDataFrame', data = subSeuratDat()@meta.data) 
+                   sc.data  <- newCellDataSet(subSeuratDat()@raw.data, phenoData = pd, featureData = fd, 
                                               lowerDetectionLimit = 0.1)
                    
                    
                    sc.data <- estimateSizeFactors(sc.data)
                    sc.data <- estimateDispersions(sc.data)
                  }else{  
-                   sc.data <- importCDS(subSeuratDat, import_all = T)
+                   sc.data <- importCDS(subSeuratDat(), import_all = T)
                  }  
                    
                    sc.data <- detectGenes(sc.data, min_expr = 0.1)
-                   sc.data <- setOrderingFilter(sc.data, subSeuratDat@var.genes)
+                   sc.data <- setOrderingFilter(sc.data, subSeuratDat()@var.genes)
                    if(input$parm_traj_norm){
                      sc.data <- reduceDimension(sc.data, reduction_method = "DDRTree")
                    }else{
@@ -505,7 +508,7 @@ data.switch.org <-  reactive({
   withProgress(message = 'Calculation in progress',
                detail = 'This may take a while...', value = 0, 
                expr = {
-                 mx     <- gdata_expr()
+                 mx     <- subSeuratDat()@raw.data
                  
                  #### filter genes by ratio of nonzero expression
                  nn <- apply(mx,1,function(v){ sum(v>0)})  ## number of nonzero expression

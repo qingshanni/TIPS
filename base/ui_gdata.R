@@ -814,7 +814,7 @@ output$switchPlotLine <- renderPlot({
  
   sde1  <- pathway.switch()[[input$parm_switchLine_pathway]]
   genes <- input$parm_switchLine_genes
-  mx.new<- gdata_expr()[genes,,drop=F]
+  mx.new<- subSeuratDat()@raw.data[genes,,drop=F]
   dm    <- dim(mx.new)
   v     <- as.vector(t(mx.new))
   dd    <- data.frame(Expression = v, Pseudotime = rep(ptime,dm[1]),gene = rep(genes,each= dm[2] ))
@@ -869,7 +869,7 @@ output$switchPlotLine_dl_plot <- downloadHandler(
     
     sde1  <- pathway.switch()[[input$parm_switchLine_pathway]]
     genes <- input$parm_switchLine_genes
-    mx.new<- gdata_expr()[genes,,drop=F]
+    mx.new<- subSeuratDat()@raw.data[genes,,drop=F]
     dm    <- dim(mx.new)
     v     <- as.vector(t(mx.new))
     dd    <- data.frame(Expression = v, Pseudotime = rep(ptime,dm[1]),gene = rep(genes,each= dm[2] ))
