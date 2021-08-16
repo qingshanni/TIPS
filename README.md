@@ -1,7 +1,7 @@
 # TIPS
 Trajectory Inference of Pathway Significance through Pseudotime Comparison for Functional Assessment of
 single-cell RNAseq Data
-# Launch TIPS directly from R and GitHub
+## Launch TIPS directly from R and GitHub
 ### Step 1: Install R and RStudio
 Before running TIPS, you will need to have R and RStudio installed
 Please check CRAN (https://cran.r-project.org/) for the installation of R.
@@ -44,7 +44,15 @@ library(shiny)
 shiny::runGitHub("TIPS", "qingshanni")    
 ```
 
-# License
+## Citation
+Please use the following citation:
+
+Zihan Zheng, Xin Qiu, Haiyang Wu, Ling Chang, Xiangyu Tang, Liyun Zou, Jingyi Li, Yuzhang Wu, Jianzhi Zhou, Shan Jiang, Ying Wan, Qingshan Ni. TIPS: trajectory inference of pathway significance through pseudotime comparison for functional assessment of single-cell RNAseq data, _Briefings in Bioinformatics_,  doi: 10.1093/bib/bbab124
+Wenbo Guo, Dongfang Wang, Shicheng Wang, Yiran Shan, Changyi Liu, Jin Gu, scCancer: a package for automated processing of single-cell RNA-seq data in cancer, _Briefings in Bioinformatics_,  bbab124, [https://doi.org/10.1093/bib/bbab124](https://doi.org/10.1093/bib/bbab124)
+
+
+
+## License
 
 
 This program is free software and can be redistributed and/or modified under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the license, or (at your option) any later version.
