@@ -54,7 +54,7 @@ shiny::runApp("TIPS")
 ## Citation
 Please use the following citation:
 
-Zheng Z, Qiu X, Wu H, Chang L, Tang X, Zou L, Li J, Wu Y, Zhou J, Jiang S, Wan Y, Ni Q. TIPS: trajectory inference of pathway significance through pseudotime comparison for functional assessment of single-cell RNAseq data. Brief Bioinform. 2021 Sep 2;22(5):bbab124. doi: [10.1093/bib/bbab124](https://doi.org/10.1093/bib/bbab124). PMID: 34370020; PMCID: PMC8425418.
+Zheng Z, Qiu X, Wu H, Chang L, Tang X, Zou L, Li J, Wu Y, Zhou J, Jiang S, Wan Y, Ni Q. TIPS: trajectory inference of pathway significance through pseudotime comparison for functional assessment of single-cell RNAseq data. Brief Bioinform. 2021 Sep 2;22(5):bbab124. [doi: 10.1093/bib/bbab124](https://doi.org/10.1093/bib/bbab124). [PMID: 34370020](https://pubmed.ncbi.nlm.nih.gov/34370020/); [PMCID: PMC8425418](http://www.ncbi.nlm.nih.gov/pmc/articles/pmc8425418/).
 
 
 ## License
